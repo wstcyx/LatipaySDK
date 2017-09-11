@@ -37,8 +37,7 @@ Latipay request
 - (void)payOrder:(LatipayOrder *)order fromScheme:(NSString *)schemeStr callback:(CompletionResultBlock)completionBlock;
 
 
-## 支付实例：
-
+//支付实例：
 - (IBAction)pay:(id)sender {
     LatipayOrder *order = [LatipayOrder new];
     order.amount = @"0.01";
@@ -59,7 +58,7 @@ Latipay request
     }];
 }
 ```
-##设置url schemes
+设置url schemes
 ![image](images/urlschemes.png)
 
 
