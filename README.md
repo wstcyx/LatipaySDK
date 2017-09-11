@@ -5,7 +5,7 @@
 ## 使用方法
 1 将整个文件夹拖到你的项目中,包括AlipaySDK和LatipaySDK.(注意用group形式,目录会显示成黄色).
 
-   ![image](images/CCOpenService_Tree.png)
+   ![image](images/document.png)
 
 2 添加AlipaySDK所依赖的动态库
 
@@ -16,9 +16,8 @@
 //AppDelegate.m
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //配置开发环境，默认为LatipayDebug模式，上线请改成LatipayRelease模式
-    [[LatipaySDK shareInstance]setEnvironment:LatipayDebug];
-    
+    //配置开发环境，如果不设置默认为LatipayDebug模式，上线请改成LatipayRelease模式
+    [[LatipayApi shareInstance]setEnvironment:LatipayDebug];
     return YES;
 }
 
@@ -53,7 +52,7 @@ Latipay request
     order.wallet_id = @"W000000037";
     order.source = @"ios";
 
-    [[LatipaySDK shareInstance] payOrder:order fromScheme:@"latipayDemo" callback:^(NSDictionary *resultDic, NSError *error) {
+    [[LatipayApi shareInstance] payOrder:order fromScheme:@"latipayDemo" callback:^(NSDictionary *resultDic, NSError *error) {
 
     }];
 }
@@ -67,24 +66,19 @@ Latipay request
 ``` objective
 
 // NOTE: 9.0之前
-- (BOOL)application:(UIApplication *)application
-openURL:(NSURL *)url
-sourceApplication:(NSString *)sourceApplication
-annotation:(id)annotation {
-
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     // 支付跳转支付宝钱包进行支付，处理支付结果
-    [[LatipaySDK shareInstance]processOrderWithLatipayResult:url standbyCallback:^(NSDictionary *resultDic, NSError *error) {
+    [[LatipayApi shareInstance]processOrderWithLatipayResult:url standbyCallback:^(NSDictionary *resultDic, NSError *error) {
 
     }];
-
     return YES;
 }
 
 // NOTE: 9.0以后使用新API接口
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
 {
-    // 支付跳转支付宝钱包进行支付，处理支付结果
-    [[LatipaySDK shareInstance]processOrderWithLatipayResult:url standbyCallback:^(NSDictionary *resultDic, NSError *error) {
+    //支付跳转支付宝钱包进行支付，处理支付结果
+    [[LatipayApi shareInstance]processOrderWithLatipayResult:url standbyCallback:^(NSDictionary *resultDic, NSError *error) {
 
     }];
     return YES;
