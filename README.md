@@ -36,8 +36,6 @@ Latipay request
 */
 - (void)payOrder:(LatipayOrder *)order fromScheme:(NSString *)schemeStr callback:(CompletionResultBlock)completionBlock;
 
-##设置url schemes
-   ![image](images/urlschemes.png)
 
 ## 支付实例：
 
@@ -61,6 +59,9 @@ Latipay request
     }];
 }
 ```
+##设置url schemes
+![image](images/urlschemes.png)
+
 
 5 设置支付宝支付结果回调 
 
