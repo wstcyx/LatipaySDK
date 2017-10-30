@@ -29,9 +29,13 @@
 /**
 Latipay request
 
-@param order 订单信息
+@param order 订单信息，详见LatipayOrder参数说明
 @param schemeStr 设置url schemes，以供支付宝返回到app
 @param completionBlock 支付结果回调
+   error code 说明
+   300:订单类型需为LatipayOrder类型，或其子类;
+   301:参数有误，请检查核对输入正确参数;
+   302:Latipay服务器error;
 */
 - (void)payOrder:(LatipayOrder *)order fromScheme:(NSString *)schemeStr callback:(CompletionResultBlock)completionBlock;
 
@@ -39,17 +43,16 @@ Latipay request
 //支付实例：
 - (IBAction)pay:(id)sender {
     LatipayOrder *order = [LatipayOrder new];
-    order.amount = @"0.01";
-    order.api_key = @"y64ckNrSd5";
-    order.callback_url = @"https://api.latipay.net/confirmation";
-    order.ip = @"127.0.0.1";
-    order.merchant_reference = @"W000000037";
+    order.amount = @"0.04";
+    order.callback_url = @"https://spotpay-staging.latipay.net/confirmation";
+    order.ip = @"112.224.65.231";
+    order.merchant_reference = @"W000000186";
     order.payment_method = @"alipay";
-    order.product_name = @"W000000037";
-    order.return_url = @"https://api.latipay.net/confirmation";
-    order.signature = @"aef492d15e6e5f52f278f0be39d32a3a0b0e897388ce45b3e0df3e4561a7c1a8";
-    order.user_id = @"U000000051";
-    order.wallet_id = @"W000000037";
+    order.product_name = @"W000000186";
+    order.return_url = @"https://spotpay-staging.latipay.net/confirmation";
+    order.signature = @"9d6e767e44f4ddc399e15c793d7225793f067dfe680c12cf1f3cfac4711681af";
+    order.user_id = @"U000000178";
+    order.wallet_id = @"W000000186";
     order.source = @"ios";
 
     [[LatipayApi shareInstance] payOrder:order fromScheme:@"latipayDemo" callback:^(NSDictionary *resultDic, NSError *error) {
@@ -57,14 +60,33 @@ Latipay request
     }];
 }
 ```
-设置url schemes
+设置url schemes  以便支付宝返回app
 ![image](images/urlschemes.png)
-
+设置app白名单 以便调起weixin客户端
+![image](images/weixin.png)
 
 5 设置支付宝支付结果回调 
 
 ``` objective
+/**
+ 支付宝回调api
+ @param resultUrl 用于接收支付宝回调的url
+ @param completionBlock 支付宝回调结果
+   error code 说明
+   9000:支付宝-订单支付成功;
+   8000:支付宝-正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态";
+   4000:支付宝-订单支付失败;
+   5000:支付宝-重复请求;
+   6001:支付宝-用户中途取消;
+   6002:支付宝-网络连接出错;
+   6004:支付宝-支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态;
+   6005:支付宝-其它支付错误;
+ */
+ 
+//支付宝回调方法。
+- (void)processOrderWithLatipayResult:(NSURL *)resultUrl standbyCallback:(CompletionResultBlock)completionBlock;
 
+//支付宝回调方法的调用举例
 // NOTE: 9.0之前
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     // 支付跳转支付宝钱包进行支付，处理支付结果
@@ -85,4 +107,5 @@ Latipay request
 }
 
 ```
-6 error Code 说明
+6 微信支付说明
+  由于微信支付完成后只能返回商家自定义H5页面，所以相关回调请在H5页面内完成。
